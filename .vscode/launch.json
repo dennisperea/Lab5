@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - dvrouter",
+            "request": "launch",
+            "mainClass": "dvrouter",
+            "projectName": "Lab 5_c6446fe3"
+        }
+    ]
+}
