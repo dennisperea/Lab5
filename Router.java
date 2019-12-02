@@ -2,17 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class Router{
-    //Router's ID
+    /*
+    * Router has an id and a list of connections to other routers
+    */
     private int id;
-    private ArrayList<Router> connectedRouters;
-    private ArrayList<Integer> pathDistance;
-    /*  ^
-    *   |
-    *   Schema for "Forwarding Table"
-    *   {R1, R3, R4}       <--Routers it is connected too
-    *   {3,  7,  9 }       <--Distance to each router.  Will be put in same position in array list
-    *
-    */ 
+    private ArrayList<Connection> Connections;
+
     public Router(int idNum) {
         id = idNum;
     }
@@ -21,13 +16,15 @@ public class Router{
         return id;
     }
 
-    public int getDistance(Router router){
-        for (int i = 0; i < connectedRouters.size();i++){
-            if (connectedRouters.get(i).getID() == router.getID()){
-                return pathDistance.get(i);
+    //gets Connection based off of Router ID being passed
+    public Connection getConnection(int ID){
+        Connection response = null;
+        for (Connection c : Connections){
+            if (c.isConnection(ID)){
+                response = c;
             }
-        }
+       }
 
-        return -1;
+       return response;
     }
 }
