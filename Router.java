@@ -10,16 +10,18 @@ public class Router{
 
     public Router(int idNum) {
         id = idNum;
+        connections = new ArrayList<Connection>();
     }
 
     public int getID() {
         return id;
     }
 
-    public void addConnection(int destinationID, int weight){
+    public void addConnection(Router destinationID, int weight){
         Connection newCon = new Connection(destinationID, weight);
         connections.add(newCon);
     }
+
     //gets Connection based off of Router ID being passed
     public Connection getConnection(int ID){
         Connection response = null;

@@ -5,17 +5,17 @@ public class Connection {
     /*
     * A connection is where the connection goes to and the weight of the connection
     */
-    private int destination;
+    private Router destination;
     private int weight;
 
-    public Connection(int destinationRouter, int connectionWeight){
+    public Connection(Router destinationRouter, int connectionWeight){
         destination = destinationRouter;
         weight = connectionWeight;
     }
 
     // This checks if the connection's router has the same id
     public boolean isConnection(int id) {
-        return (id == destination);
+        return (id == destination.getID());
     }
 
     public int getWeight(){
@@ -23,6 +23,6 @@ public class Connection {
     }
 
     public void showInfo(){
-        System.out.println("Connection to " +  destination+ ", weight: " + weight);
+        System.out.println("Connection to " +  destination.getID() + ", weight: " + weight);
     }
 }

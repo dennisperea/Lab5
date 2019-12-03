@@ -29,7 +29,7 @@ public class dvrouter{
     public void routerList(){
         for (Router r:routers){
             System.out.println("Router " + r.getID());
-            //r.showConnections();
+            r.showConnections();
         }
     }
 
@@ -75,9 +75,11 @@ public class dvrouter{
             int weight = Integer.parseInt(values[2]);
             
             Router router1 = test.getRouter(router1ID);
-            System.out.println(router1);
-            //router1.addConnection(router2ID, weight);
-            
+            Router router2 = test.getRouter(router2ID);
+            router1.addConnection(router2, weight);
+            router2.addConnection(router1, weight);
+            router1.showConnections();
+            router2.showConnections();
         }
         scan.close();
     } catch (Exception e){
