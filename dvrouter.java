@@ -78,8 +78,6 @@ public class dvrouter{
             Router router2 = test.getRouter(router2ID);
             router1.addConnection(router2, weight);
             router2.addConnection(router1, weight);
-            router1.showConnections();
-            router2.showConnections();
         }
         scan.close();
     } catch (Exception e){
