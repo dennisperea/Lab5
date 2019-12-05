@@ -22,6 +22,10 @@ public class Connection {
         return weight;
     }
 
+    public Router getDestination(){
+        return destination;
+    }
+
     public void showInfo(){
         System.out.println("Connection to " +  destination.getID() + ", weight: " + weight);
     }
