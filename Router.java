@@ -7,10 +7,12 @@ public class Router{
     */
     private int id;
     private ArrayList<Connection> connections;
+    private boolean visited;
 
     public Router(int idNum) {
         id = idNum;
         connections = new ArrayList<Connection>();
+        visited = false;
     }
 
     public int getID() {
@@ -38,5 +40,17 @@ public class Router{
         for (Connection c: connections){
             c.showInfo();
         }
+    }
+
+    public void visit(){
+        visited = true;
+    }
+
+    public void unvisit(){
+        visited = false;
+    }
+
+    public boolean getVisit(){
+        return visited;
     }
 }
