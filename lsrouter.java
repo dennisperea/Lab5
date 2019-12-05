@@ -49,8 +49,10 @@ public class lsrouter{
             System.out.println(e + "2");
         }
     
-        graph.djekstra(graph.getRouter(1), graph.getRouter(3));
+        // graph.djekstra(graph.getRouter(1), graph.getRouter(3));
+        // graph.djekstra(graph.getRouter(2), graph.getRouter(3));
         //graph.routerList();
+        graph.printRoutingTable();
     
         }
 }

@@ -1,6 +1,3 @@
-import java.io.*; 
-import java.util.*;
-
 public class Connection {
     /*
     * A connection is where the connection goes to and the weight of the connection

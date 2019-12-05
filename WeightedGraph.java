@@ -1,6 +1,4 @@
-import java.io.*; 
 import java.util.*;
-import java.util.Scanner;
 public class WeightedGraph{
     public ArrayList<Router> routers = new ArrayList<Router>();
     int size = 0;
@@ -30,6 +28,19 @@ public class WeightedGraph{
 
         return null;
     }
+
+    public boolean hasAvailableConnections(Router current){
+        //Break case 2, all of the connections have been visited already
+        boolean destinationAvailable = false;
+        for (Connection c : current.getConnections()){
+            //if there is a router that has not been visited
+            if (c.getDestination().getVisit() == false){
+                destinationAvailable = true;
+            }
+        }
+        return destinationAvailable;
+    }
+
     public void routerList(){
         for (Router r:routers){
             System.out.println("Router " + r.getID());
@@ -39,8 +50,17 @@ public class WeightedGraph{
 
     /*
     *  Remember, array[pos] = id - 1
+    *  returns <lasthop, pathcost>
     */
-    public void djekstra(Router root, Router destination){
+    public int[] djekstra(Router root, Router destination){
+        //if router and destination same
+        if (root.getID() == destination.getID()){
+            int[] result = new int[2];
+            result[0] = root.getID();
+            result[1] = 0;
+            return result;
+        }
+
         //Storing shortest path currently known
         int[] shortestPath = new int[size];
         //Storing the weights of the current router's connection to neighbors
@@ -61,8 +81,8 @@ public class WeightedGraph{
         }
 
         // Prints out content
-        System.out.println("-----------------------------------------------------------------------------------");
-        System.out.println("We are going from " + root.getID() + " to " + destination.getID());
+        // System.out.println("-----------------------------------------------------------------------------------");
+        // System.out.println("We are going from " + root.getID() + " to " + destination.getID());
 
         //Find the smallest router to start the algorithm
         //ID of smallest router, start the value with the first available option
@@ -88,28 +108,23 @@ public class WeightedGraph{
         //This is where we start our first step
         current = getRouter(smallestRouterID);
         current.visit();
-        System.out.println("First step--> Router:" + smallestRouterID + " Weight to router from root:" + smallestRouterWeight);
+        // System.out.println("First step--> Router:" + smallestRouterID + " Weight to router from root:" + smallestRouterWeight);
         //Now we loop
+        Router previousRouter = current;
         boolean done = false;
         while (done == false){
             //Break case 1, we found the router
             if (current.getID() == destination.getID()){
                 done = true;
-                System.out.println("Router found");
+                // System.out.println("Router found");
                 break;
             }
 
             //Break case 2, all of the connections have been visited already
-            boolean destinationAvailable = false;
-            for (Connection c : current.getConnections()){
-                //if there is a router that has not been visited
-                if (c.getDestination().getVisit() == false){
-                    destinationAvailable = true;
-                }
-            }
+            boolean destinationAvailable = hasAvailableConnections(current);
             if (destinationAvailable == false){
                 done = true;
-                System.out.println("No more routers available");
+                // System.out.println("v-- No more routers available");
                 break;
             }
 
@@ -131,7 +146,7 @@ public class WeightedGraph{
             smallestRouterID = 0;
             smallestRouterWeight = 9999;
             for (int b = 0; b < currentNeighborConnectionWeight.length; b++){
-            if (currentNeighborConnectionWeight[b]  < smallestRouterWeight){
+            if ((currentNeighborConnectionWeight[b]  < smallestRouterWeight) & (getRouter(b+1).getConnections() != null)){
                 // id is pos+1
                 smallestRouterID = b + 1;
                 smallestRouterWeight = currentNeighborConnectionWeight[b];
@@ -140,22 +155,46 @@ public class WeightedGraph{
 
             // add its weight
             totalPathLength += smallestRouterWeight;
+            previousRouter = current;
             current = getRouter(smallestRouterID);
             current.visit();
-            System.out.println("Next shortest path--> Router: " + current.getID() + " Length from root:" + totalPathLength);
+            // System.out.println("Next shortest path--> Router: " + current.getID() + " Length from root:" + totalPathLength);
 
 
         } // <--------------------------------------------------------------------------------End of while loop
 
+        // returns <lasthop, pathcost>
+        int[] result = new int[2];
         //Check and see if the path length is smaller then the original
         if (totalPathLength < shortestPath[destination.getID()-1]){
             shortestPath[destination.getID()-1] = totalPathLength;
+            result[0] = previousRouter.getID();
+            result[1] = shortestPath[destination.getID()-1];
+        } else {
+            //root was shorter
+            result[0] = root.getID();
+            result[1] = shortestPath[destination.getID()-1];
         }
-        System.out.println("Last hop:" + current.getID() + " Total Distance:" + shortestPath[destination.getID()-1]);
-        /*// Prints out content
-        for (int j = 0; j < shortestPath.length; j++){
-            System.out.print(shortestPath[j] + ", ");
-        }*/
-        
+        // System.out.println("Last hop:" + current.getID() + " Total Distance:" + shortestPath[destination.getID()-1]);   
+
+        //reset the visited list
+        for (Router r: routers){
+            r.unvisit();
+        }
+        return result;
     }
+
+    public void printRoutingTable(){
+        for (int j = 1; j < routers.size()+1;j++){
+            System.out.println("Router " + getRouter(j).getID());
+            for (int i = 1; i < size+1; i++){
+                //getRouter(i) is destination
+                int[] djekstraResult = djekstra(getRouter(j), getRouter(i));
+                System.out.println(getRouter(i).getID() + " " + djekstraResult[0] + " " + djekstraResult[1]);
+            }
+            System.out.println();   
+        }
+    }
+
+    
 }
