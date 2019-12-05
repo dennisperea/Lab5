@@ -36,6 +36,10 @@ public class Router{
        return response;
     }
 
+    public ArrayList<Connection> getConnections(){
+        return connections;
+    }
+
     public void showConnections(){
         for (Connection c: connections){
             c.showInfo();

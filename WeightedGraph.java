@@ -58,5 +58,10 @@ public class WeightedGraph{
         // Set the distance to itself as 0, mark as visited
         shortestPath[root.getID()-1] = 0;
         root.visit();
+
+        //For each connection the root has, set the shortestPath available to the weight to the neighbor
+        for (Connection c : root.getConnections()){
+            shortestPath[c.getDestination().getID()-1] = c.getWeight();
+        }
     }
 }
