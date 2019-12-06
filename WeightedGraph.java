@@ -96,7 +96,7 @@ public class WeightedGraph{
         int totalPathLength = 0;
 
 
-        //Find the shortest availble path link to start with
+        //Find the shortest available path link to start with
         for (int k = 0; k < shortestPath.length; k++){
             if ((shortestPath[k]  < smallestRouterWeight) && (shortestPath[k] != 0)){
                 // id is pos+1
@@ -118,17 +118,27 @@ public class WeightedGraph{
         while (done == false){
             //Break case 1, we found the router
             if (current.getID() == destination.getID()){
-                done = true;
-                // System.out.println("Router found");
-                break;
+              // check if root has available connections
+              // set current to root and store totalPathLength to new variable && store hops in new array ArrayList
+              // compare totals and store the one that's lower ++ hops list too
+              // could we recursively call djekstra?
+              done = true;
+              // System.out.println("Router found");
+              break;
             }
 
             //Break case 2, all of the connections have been visited already
             boolean destinationAvailable = hasAvailableConnections(current);
             if (destinationAvailable == false){
-                done = true;
-                // System.out.println("v-- No more routers available");
-                break;
+                if(hasAvailableConnections(root)){
+                  current = root;
+                  hops.clear();
+                  totalPathLength= 0;
+                } else {
+                  done = true;
+                  // System.out.println("v-- No more routers available");
+                  break;
+                }
             }
 
             //set all to 9999 to assume we cant see
@@ -145,7 +155,7 @@ public class WeightedGraph{
             }
 
             //Find the next step to take
-            //Find the shortest availble path link to start with
+            //Find the shortest available path link to start with
             smallestRouterID = 0;
             smallestRouterWeight = 9999;
             for (int b = 0; b < currentNeighborConnectionWeight.length; b++){
