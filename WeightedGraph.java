@@ -1,7 +1,8 @@
 import java.util.*;
 public class WeightedGraph{
     public ArrayList<Router> routers = new ArrayList<Router>();
-    int size = 0;
+    public int size = 0;
+    public ArrayList<Integer> hops = new ArrayList<Integer>();
 
     public boolean routerExist(int id){
         // If the router exist, don't create another router
@@ -58,6 +59,7 @@ public class WeightedGraph{
             int[] result = new int[2];
             result[0] = root.getID();
             result[1] = 0;
+            hops.add(0);
             return result;
         }
 
@@ -92,8 +94,8 @@ public class WeightedGraph{
         Router current = null;
         //Storing path length
         int totalPathLength = 0;
-        
-        
+
+
         //Find the shortest availble path link to start with
         for (int k = 0; k < shortestPath.length; k++){
             if ((shortestPath[k]  < smallestRouterWeight) && (shortestPath[k] != 0)){
@@ -107,6 +109,7 @@ public class WeightedGraph{
 
         //This is where we start our first step
         current = getRouter(smallestRouterID);
+        hops.add(current.getID());
         current.visit();
         // System.out.println("First step--> Router:" + smallestRouterID + " Weight to router from root:" + smallestRouterWeight);
         //Now we loop
@@ -157,6 +160,7 @@ public class WeightedGraph{
             totalPathLength += smallestRouterWeight;
             previousRouter = current;
             current = getRouter(smallestRouterID);
+            hops.add(current.getID());
             current.visit();
             // System.out.println("Next shortest path--> Router: " + current.getID() + " Length from root:" + totalPathLength);
 
@@ -175,13 +179,19 @@ public class WeightedGraph{
             result[0] = root.getID();
             result[1] = shortestPath[destination.getID()-1];
         }
-        // System.out.println("Last hop:" + current.getID() + " Total Distance:" + shortestPath[destination.getID()-1]);   
+        // System.out.println("Last hop:" + current.getID() + " Total Distance:" + shortestPath[destination.getID()-1]);
 
         //reset the visited list
         for (Router r: routers){
             r.unvisit();
         }
         return result;
+    }
+
+    public void printHops(){
+      for (int i : hops) {
+        System.out.print(" "+i);
+      }
     }
 
     public void printRoutingTable(){
@@ -192,9 +202,9 @@ public class WeightedGraph{
                 int[] djekstraResult = djekstra(getRouter(j), getRouter(i));
                 System.out.println(getRouter(i).getID() + " " + djekstraResult[0] + " " + djekstraResult[1]);
             }
-            System.out.println();   
+            System.out.println();
         }
     }
 
-    
+
 }
