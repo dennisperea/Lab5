@@ -121,6 +121,7 @@ public class WeightedGraph{
             //Break case 1, we found the router
             if (current.getID() == destination.getID()){
               // check if root has available connections
+<<<<<<< HEAD
               /*if (hasAvailableConnections(root)){
                 // set current to root and store totalPathLength to new variable && store hops in new array ArrayList
                 oldPathLength = totalPathLength;
@@ -133,6 +134,11 @@ public class WeightedGraph{
                 totalPathLength = oldPathLength;
                 hops = oldHops;
               }*/
+=======
+              // set current to root and store totalPathLength to new variable && store hops in new array ArrayList
+              // compare totals and store the one that's lower ++ hops list too
+              // could we recursively call djekstra?
+>>>>>>> 176f7a941b95945baa9fa32881e1fb8e9aef942a
               done = true;
               // System.out.println("Router found");
               break;
