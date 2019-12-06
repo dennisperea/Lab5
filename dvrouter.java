@@ -62,30 +62,47 @@ public class dvrouter{
         int destination = Integer.parseInt(values[1]);
         test.hops.clear();
         test.djekstra(test.getRouter(root), test.getRouter(destination));
-        //needs to djekstra from root to destination, and keep track of hops
         System.out.print("from " + values[0] + " to " +values[1]+": hops");
         test.printHops();
         System.out.print("; message: "+ values[2]);
         System.out.println();
+
+        //add case for if destination unreachable
+        //
       }
       scan.close();
     } catch (Exception e){
         System.out.println(e);
     }
 
-    /*
+    System.out.println();
     System.out.println("Changes File");
     //This will read changes file
     try {
-        Scanner scan = new Scanner(new FileInputStream(args[1]));
-        while (scan.hasNextLine()) {
-            System.out.println(scan.nextLine());
+      Scanner scan = new Scanner(new FileInputStream(args[1]));
+      while (scan.hasNextLine()) {
+        String inputLine = scan.nextLine();
+        String[] values = inputLine.split(" ");
+        int router1ID = Integer.parseInt(values[0]);
+        int router2ID = Integer.parseInt(values[1]);
+        int weight = Integer.parseInt(values[2]);
+
+        if(weight == -999){
+          weight = 999;
         }
-        scan.close();
+
+        Router router1 = test.getRouter(router1ID);
+        Router router2 = test.getRouter(router2ID);
+        router1.addConnection(router2, weight);
+        router2.addConnection(router1, weight);
+
+        test.printRoutingTable();
+      }
+      scan.close();
     } catch (Exception e){
-        System.out.println(e);
+        System.out.println(e + "2");
     }
-    */
+
 
 
 
