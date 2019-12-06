@@ -1,4 +1,4 @@
-import java.io.*; 
+import java.io.*;
 import java.util.*;
 
 public class Router{
@@ -44,6 +44,10 @@ public class Router{
         for (Connection c: connections){
             c.showInfo();
         }
+    }
+
+    public int length(){
+      return connections.size();
     }
 
     public void visit(){
