@@ -78,6 +78,7 @@ public class lsrouter{
     System.out.println();
     System.out.println("Changes File");
     //This will read changes file
+    
     try {
       Scanner scan = new Scanner(new FileInputStream(args[1]));
       while (scan.hasNextLine()) {

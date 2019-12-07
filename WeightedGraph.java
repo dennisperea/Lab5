@@ -82,10 +82,6 @@ public class WeightedGraph{
             shortestPath[c.getDestination().getID()-1] = c.getWeight();
         }
 
-        // Prints out content
-        // System.out.println("-----------------------------------------------------------------------------------");
-        // System.out.println("We are going from " + root.getID() + " to " + destination.getID());
-
         //Find the smallest router to start the algorithm
         //ID of smallest router, start the value with the first available option
         int smallestRouterID = 0;
@@ -94,16 +90,22 @@ public class WeightedGraph{
         Router current = null;
         //Storing path length
         int totalPathLength = 0;
-        int oldPathLength =99999;
         ArrayList<Integer> oldHops = new ArrayList<Integer>();
 
 
         //Find the shortest available path link to start with
         for (int k = 0; k < shortestPath.length; k++){
             if ((shortestPath[k]  < smallestRouterWeight) && (shortestPath[k] != 0)){
-                // id is pos+1
-                smallestRouterID = k + 1;
-                smallestRouterWeight = shortestPath[k];
+                // Check to see if dead end
+                if (routers.get(k).getConnections().size() > 1){
+                    // id is pos+1
+                    smallestRouterID = k + 1;
+                    smallestRouterWeight = shortestPath[k];
+                } else if (routers.get(k).getID() == destination.getID()){ //edge case
+                    // id is pos+1
+                    smallestRouterID = k + 1;
+                    smallestRouterWeight = shortestPath[k];
+                }
             }
         }
         // add its weight
@@ -113,26 +115,14 @@ public class WeightedGraph{
         current = getRouter(smallestRouterID);
         hops.add(current.getID());
         current.visit();
-        // System.out.println("First step--> Router:" + smallestRouterID + " Weight to router from root:" + smallestRouterWeight);
+        //System.out.println("First step--> Router:" + smallestRouterID + " Weight to router from root:" + smallestRouterWeight);
         //Now we loop
-        Router previousRouter = current;
+        Router firstRouter = current;
         boolean done = false;
         while (done == false){
             //Break case 1, we found the router
             if (current.getID() == destination.getID()){
               // check if root has available connections
-              /*if (hasAvailableConnections(root)){
-                // set current to root and store totalPathLength to new variable && store hops in new array ArrayList
-                oldPathLength = totalPathLength;
-                totalPathLength=0;
-                oldHops = hops;
-                hops.clear();
-                break;
-              }
-              if (oldPathLength <totalPathLength){
-                totalPathLength = oldPathLength;
-                hops = oldHops;
-              }*/
 
               // set current to root and store totalPathLength to new variable && store hops in new array ArrayList
               // compare totals and store the one that's lower ++ hops list too
@@ -174,7 +164,7 @@ public class WeightedGraph{
             smallestRouterID = 0;
             smallestRouterWeight = 9999;
             for (int b = 0; b < currentNeighborConnectionWeight.length; b++){
-            if ((currentNeighborConnectionWeight[b]  < smallestRouterWeight) & (getRouter(b+1).getConnections() != null)){
+            if ((currentNeighborConnectionWeight[b]  < smallestRouterWeight)){
                 // id is pos+1
                 smallestRouterID = b + 1;
                 smallestRouterWeight = currentNeighborConnectionWeight[b];
@@ -183,7 +173,6 @@ public class WeightedGraph{
 
             // add its weight
             totalPathLength += smallestRouterWeight;
-            previousRouter = current;
             current = getRouter(smallestRouterID);
             hops.add(current.getID());
             current.visit();
@@ -195,16 +184,18 @@ public class WeightedGraph{
         // returns <lasthop, pathcost>
         int[] result = new int[2];
         //Check and see if the path length is smaller then the original
-        if (totalPathLength < shortestPath[destination.getID()-1]){
+        if (totalPathLength <= shortestPath[destination.getID()-1]){
+            //System.out.println("Case new " + firstRouter.getID());
             shortestPath[destination.getID()-1] = totalPathLength;
-            result[0] = previousRouter.getID();
+            result[0] = firstRouter.getID();
             result[1] = shortestPath[destination.getID()-1];
         } else {
             //root was shorter
+            //System.out.println("Case old " + root.getID());
             result[0] = root.getID();
             result[1] = shortestPath[destination.getID()-1];
         }
-        // System.out.println("Last hop:" + current.getID() + " Total Distance:" + shortestPath[destination.getID()-1]);
+        // System.out.println("Next hop:" + current.getID() + " Total Distance:" + shortestPath[destination.getID()-1]);
 
         //reset the visited list
         for (Router r: routers){
@@ -228,6 +219,13 @@ public class WeightedGraph{
                 System.out.println(getRouter(i).getID() + " " + djekstraResult[0] + " " + djekstraResult[1]);
             }
             System.out.println();
+            /*
+            *1 5 6
+            2 2 0
+            3 3 3
+            4 5 5
+            5 5 4
+            */
         }
     }
 
