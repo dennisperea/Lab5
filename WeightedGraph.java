@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 public class WeightedGraph{
     public ArrayList<Router> routers = new ArrayList<Router>();
@@ -211,23 +212,26 @@ public class WeightedGraph{
     }
 
     public void printRoutingTable(){
-        for (int j = 1; j < routers.size()+1;j++){
-            System.out.println("Router " + getRouter(j).getID());
-            for (int i = 1; i < size+1; i++){
-                //getRouter(i) is destination
-                int[] djekstraResult = djekstra(getRouter(j), getRouter(i));
-                System.out.println(getRouter(i).getID() + " " + djekstraResult[0] + " " + djekstraResult[1]);
+        try{
+            BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt", true));
+            for (int j = 1; j < routers.size()+1;j++){
+                System.out.println("Router " + getRouter(j).getID());
+                for (int i = 1; i < size+1; i++){
+                    //getRouter(i) is destination
+                    int[] djekstraResult = djekstra(getRouter(j), getRouter(i));
+                    String outputStr = getRouter(i).getID() + " " + djekstraResult[0] + " " + djekstraResult[1];
+                    System.out.println(outputStr);
+                    writer.append(outputStr);
+                    writer.newLine();
+                }
+                //For seperating
+                writer.newLine();
+                System.out.println();
             }
-            System.out.println();
-            /*
-            *1 5 6
-            2 2 0
-            3 3 3
-            4 5 5
-            5 5 4
-            */
+            writer.close();
+        }   catch(IOException e){
+            System.out.println(e.toString());
         }
     }
-
 
 }

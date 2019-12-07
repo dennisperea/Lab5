@@ -98,6 +98,7 @@ public class lsrouter{
         router2.addConnection(router1, weight);
 
         graph.printRoutingTable();
+        
       }
       scan.close();
     } catch (Exception e){
