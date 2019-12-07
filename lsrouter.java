@@ -4,16 +4,8 @@ public class lsrouter{
   /*
   * [ARGS] : {topoFile, changesFile, messageFile}
   */
-  public static void main(String [] args){
-    // first check for number of arguments
-    if(args.length < 3) {
-      System.out.println("Error, usage: java lsrouter topoFile changesFile messageFile");
-      System.exit(1);
-    }
 
-    //dvrouter object made to manipulate and store the routers
-    WeightedGraph graph = new WeightedGraph();
-
+  public void createTopologyFile(String[] args, WeightedGraph graph){
     // This creates all the routers from the topology files
     try {
       Scanner scan = new Scanner(new FileInputStream(args[0]));
@@ -27,8 +19,9 @@ public class lsrouter{
     } catch (Exception e){
       System.out.println(e + "1");
     }
+  }
 
-
+  public void createConnections(String[] args, WeightedGraph graph){
     // This creates all the connections for all the routers
     try {
       Scanner scan = new Scanner(new FileInputStream(args[0]));
@@ -48,9 +41,9 @@ public class lsrouter{
     } catch (Exception e){
       System.out.println(e + "2");
     }
+  }
 
-    graph.printRoutingTable();
-
+  public void readMessageFiles(String[] args, WeightedGraph graph){
     System.out.println("Message File");
     //This will read message file
     try {
@@ -74,7 +67,9 @@ public class lsrouter{
     } catch (Exception e){
       System.out.println(e);
     }
+  }
 
+  public void readChangesFile(String[] args, WeightedGraph graph){
     System.out.println();
     System.out.println("Changes File");
     //This will read changes file
@@ -98,11 +93,32 @@ public class lsrouter{
         router2.addConnection(router1, weight);
 
         graph.printRoutingTable();
+        System.out.println();
+        readMessageFiles(args,graph);
         
       }
       scan.close();
     } catch (Exception e){
         System.out.println(e + "2");
     }
+  }
+
+  public static void main(String [] args){
+    // first check for number of arguments
+    if(args.length < 3) {
+      System.out.println("Error, usage: java lsrouter topoFile changesFile messageFile");
+      System.exit(1);
+    }
+
+    //graph object made to manipulate and store the routers, lsrouter object to call helper functions
+    WeightedGraph graph = new WeightedGraph();
+    lsrouter lsrout = new lsrouter();
+    lsrout.createTopologyFile(args, graph);
+    lsrout.createConnections(args, graph);
+
+    graph.printRoutingTable();
+
+    lsrout.readMessageFiles(args, graph);
+    lsrout.readChangesFile(args, graph);
   }
 }
