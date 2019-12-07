@@ -91,7 +91,6 @@ public class WeightedGraph{
         Router current = null;
         //Storing path length
         int totalPathLength = 0;
-        ArrayList<Integer> oldHops = new ArrayList<Integer>();
 
 
         //Find the shortest available path link to start with

@@ -116,6 +116,14 @@ public class lsrouter{
       System.exit(1);
     }
 
+    //Cleans file of any previous runs
+    try {
+      PrintWriter pw = new PrintWriter("./output.txt");
+      pw.close();
+    } catch (IOException e){
+      System.out.println(e.toString());
+    }
+
     //graph object made to manipulate and store the routers, lsrouter object to call helper functions
     WeightedGraph graph = new WeightedGraph();
     lsrouter lsrout = new lsrouter();
