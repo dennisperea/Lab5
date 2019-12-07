@@ -48,6 +48,7 @@ public class lsrouter{
     //This will read message file
     try {
       Scanner scan = new Scanner(new FileInputStream(args[2]));
+      BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt", true));
       while (scan.hasNextLine()) {
         String inputLine = scan.nextLine();
         String[] values = inputLine.split(" ", 3);
@@ -60,10 +61,15 @@ public class lsrouter{
         System.out.print("; message: "+ values[2]);
         System.out.println();
 
+        String result = "from " + values[0] + " to " + values[1] +": hops" +  graph.getHops() + "; message: "+ values[2];
+        writer.append(result);
+        writer.newLine();
         //add case for if destination unreachable
         //
       }
+      writer.newLine();
       scan.close();
+      writer.close();
     } catch (Exception e){
       System.out.println(e);
     }

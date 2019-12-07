@@ -211,6 +211,14 @@ public class WeightedGraph{
       }
     }
 
+    public String getHops(){
+        String result = "";
+        for (int i : hops) {
+            result += " " + i ;
+        }
+        return result;
+    }
+
     public void printRoutingTable(){
         try{
             BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt", true));
